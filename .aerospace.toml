@@ -129,6 +129,11 @@ automatically-unhide-macos-hidden-apps = false
     alt-m = 'workspace Media'
     alt-d = 'workspace DB'
     alt-1 = 'workspace 1'
+    alt-2 = 'workspace 2'
+
+    alt-7 = 'workspace 7'
+    alt-8 = 'workspace 8'
+
     # alt-a = 'workspace A' # In your config, you can drop workspace bindings that you don't need
     # alt-b = 'workspace B'
     # alt-c = 'workspace C'
@@ -164,6 +169,10 @@ automatically-unhide-macos-hidden-apps = false
     alt-shift-e = 'move-node-to-workspace Email'
     alt-shift-d = 'move-node-to-workspace DB'
     alt-shift-1 = 'move-node-to-workspace 1'
+    alt-shift-2 = 'move-node-to-workspace 2'
+
+    alt-shift-7 = 'move-node-to-workspace 7'
+    alt-shift-8 = 'move-node-to-workspace 8'
     # alt-shift-a = 'move-node-to-workspace A'
     # alt-shift-b = 'move-node-to-workspace B'
     # alt-shift-c = 'move-node-to-workspace C'
@@ -203,12 +212,16 @@ Terminal = 'main'
 Others = 'main'
 DB = 'main'
 1 = 'main'
+2 = 'main'
+
 
 Communication = ['secondary', 'main']
 Email = ['secondary', 'main']
 Notes = ['secondary', 'main']
 Files = ['secondary', 'main']
 Media = ['secondary', 'main']
+7 = ['secondary', 'main']
+8 = ['secondary', 'main']
 
 # Automatically move apps to specific workspaces
  
@@ -259,6 +272,24 @@ run = ['layout tiling', 'move-node-to-workspace Communication']
 if.app-id = 'com.microsoft.teams2'
 check-further-callbacks = true
 run = ['layout tiling', 'move-node-to-workspace Communication']
+
+#Obsidian
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
+check-further-callbacks = true
+run = ['layout tiling', 'move-node-to-workspace Notes']
+
+#Spotify
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
+check-further-callbacks = true
+run = ['layout tiling', 'move-node-to-workspace Media']
+
+#Outlook
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Outlook'
+check-further-callbacks = true
+run = ['layout tiling', 'move-node-to-workspace Email']
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes

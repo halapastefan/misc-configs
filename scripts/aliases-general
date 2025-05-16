@@ -1,0 +1,5 @@
+alias downloads='open ~/Downloads'
+
+
+alias reddit='open -a "Brave Browser" https://reddit.com'
+alias yt='open -a "Brave Browser" https://youtube.com'
