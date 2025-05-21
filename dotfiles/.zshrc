@@ -79,7 +79,7 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
-# source $ZSH/oh-my-zsh.sh
+source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
@@ -111,7 +111,7 @@ plugins=(git)
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 source "$HOME/scripts/aliases/aliases-general.sh"
 source "$HOME/scripts/aliases/aliases-project.sh"
-source "$HOME/scripts/aws/functions.zsh"
+source "$HOME/scripts/aws/functions.sh"
 
 eval "$(zoxide init zsh)"
 export PATH=$PATH:/Users/s.halapa/.spicetify

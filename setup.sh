@@ -20,5 +20,5 @@ stow -t ~ dotfiles
 
 # Symlink scripts
 mkdir ~/scripts
-stow -t ~ scripts
+stow -t ~/scripts scripts
 chmod +x /scripts/utils/development.sh
