@@ -72,11 +72,30 @@ pd() {
     --query "stageStates[].{Stage: stageName, Status: latestExecution.status, actions: actionStates[].{Name: actionName, Status: latestExecution.status, id: latestExecution.externalExecutionId, summary: latestExecution.summary}}"
 }
 
+# get short pipeline details. Only status of the actions per stage
+psd() {
+    local pipeline_name
+    if [ -z "$1" ]; then
+        pipeline_name=$(pls)
+    else
+        pipeline_name="$1"
+    fi
+    aws codepipeline get-pipeline-state --name "$pipeline_name" \
+    --profile dta --no-cli-pager \
+    --query "stageStates[].{Stage: stageName, Status: latestExecution.status}" --output table
+}
+
 pipelineLogs() {
-    
-    echo "Fetching logs for pipeline: $1"
+    local pipeline_id
+    if [ -z "$1" ]; then
+        pipeline_id=$(pls | xargs -I {} pd {} | jq -r '.[].actions[].id' | fzf)
+    else
+        pipeline_id="$1"
+    fi
+
+    echo "Fetching logs for pipeline: $pipeline_id"
     LOG_INFO=$(aws codebuild batch-get-builds \
-        --ids "$1" \
+        --ids "$pipeline_id" \
         --query "builds[].{logs: logs.{groupName: groupName, streamName: streamName}}" \
         --profile dta \
         --no-cli-pager) 
@@ -150,6 +169,19 @@ tpl() {
     tailLogs "$pipeline_id"
 }
 
+#Read pipeline logs
+rpl() {
+    local pipeline_name
+    if [ -z "$1" ]; then
+        pipeline_name=$(pls)
+    else
+        pipeline_name="$1"
+    fi
+    local pipeline_id
+    pipeline_id=$(pd "$pipeline_name" | jq -r '.[].actions[].id' | fzf)
+    pipelineLogs "$pipeline_id"
+}
+
 #Tail logs for choosen log group
 tl() {
     local log_group
@@ -181,10 +213,6 @@ rl() {
     echo "Selected log stream: $log_stream"
 
     # Debugging timestamps
-    local start_time end_time
-    start_time=$(date -v-1d +%s000)
-    end_time=$(date +%s000)
-    echo "Start time: $start_time, End time: $end_time"
 
     # Fetching logs with time range and query for messages, adding color for errors and warnings, and piping to less
     aws logs get-log-events \
