@@ -1,4 +1,3 @@
-
 brew install --cask iterm2
 brew install lazygit
 brew install zoxide
@@ -12,6 +11,7 @@ brew install caarlos0/tap/timer
 brew install terminal-notifier
 brew install bat
 brew install jq
+brew install tree
 brew install powerlevel10k
 brew install stow
 

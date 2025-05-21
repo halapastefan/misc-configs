@@ -1,0 +1,39 @@
+[user]
+	email = s.halapa@levi9.com
+	name = Stefan Halapa
+[core]
+	compression = 9
+	whitespaces = error
+	preloadindex = true
+[pull]
+    rebase = true
+	default = current
+[push]
+	autoSetupRemote = true
+	default = current
+	followTags = true
+[rebase]
+	autoStash = true
+	missingCommitsCheck = warn
+
+[status]
+	branch = true
+	showStash = true
+	showUntrackedFiles = all
+[diff]
+	renames = copies
+	context = 3
+	interHunkContext = 10
+	tool = vimdiff
+
+[difftool]
+    prompt = false
+[log]
+	abbrevCommit = true  # short commits
+    graphColors = blue,yellow,cyan,magenta,green,red
+[color "branch"]
+    current  = magenta
+    local    = default
+    remote   = yellow
+    upstream = green
+    plain    = blue
