@@ -10,10 +10,12 @@ brew install --cask temurin # Java LTS
 brew install caarlos0/tap/timer
 brew install terminal-notifier
 brew install bat
+brew install --cask plexamp
 brew install jq
 brew install tree
 brew install powerlevel10k
 brew install stow
+brew install ripgrep
 
 # Symlink dotfiles
 stow -t ~ dotfiles 

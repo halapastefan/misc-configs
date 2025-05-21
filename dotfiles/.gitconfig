@@ -37,3 +37,6 @@
     remote   = yellow
     upstream = green
     plain    = blue
+[blame]
+    coloring = highlightRecent
+    date = relative
