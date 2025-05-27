@@ -16,6 +16,7 @@ brew install tree
 brew install powerlevel10k
 brew install stow
 brew install ripgrep
+brew install tldr
 
 # Symlink dotfiles
 stow -t ~ dotfiles 

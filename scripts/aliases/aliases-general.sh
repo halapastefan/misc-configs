@@ -3,6 +3,7 @@ alias downloads='open ~/Downloads'
 # 
 alias reddit='open -a "Brave Browser" https://reddit.com'
 alias yt='open -a "Brave Browser" https://youtube.com'
+alias google='open -a "Brave Browser" https://www.google.com/search?q='
 
 alias work="timer 45m && terminal-notifier -message 'Pomodoro'\
         -title 'Work Timer is up! Take a Break 😊'\
