@@ -64,3 +64,7 @@ alias ft='fd --type=d --hidden --strip-cwd-prefix --exclude .git | fzf --preview
 # Standard
 alias cd='z'
 alias ls='eza --long --color=always --icons=always --no-user'
+
+
+# AWS
+alias ld='lambdaDetails'

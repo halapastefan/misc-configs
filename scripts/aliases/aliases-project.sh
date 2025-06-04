@@ -1,7 +1,7 @@
 alias incision-dev='open -a iTerm ~/Development/Incision'
 
-alias aws-dta='aws sso login --profile dta'
-alias aws-prod='aws sso login --profile prod'
+# alias aws-dta='aws sso login --profile dta'
+# alias aws-prod='aws sso login --profile prod'
 
 alias assist-dev-ui='open -a "Brave Browser" https://dev.assist.incision.care'
 alias admin-dev-ui='open -a "Brave Browser" https://dev.admin.incision.care'

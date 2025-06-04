@@ -1,6 +1,16 @@
+aws_dta() {
+  export AWS_PROFILE=dta
+  aws sso login --profile dta
+}
+
+aws_prod() {
+  export AWS_PROFILE=prod
+  aws sso login --profile prod
+}
+
 s3explore() {
     local bucket
-    bucket=$(aws s3 ls --profile dta | awk '{print $NF}' | fzf)
+    bucket=$(aws s3 ls --profile $AWS_PROFILE | awk '{print $NF}' | fzf)
     if [ -z "$bucket" ]; then
         echo "No bucket selected."
         return 1
@@ -9,7 +19,7 @@ s3explore() {
     local -a back_stack forward_stack
     while true; do
         local items_list items menu_choice
-        items_list=$(aws s3 ls "s3://$bucket/$prefix" --profile dta | awk '{print $NF}')
+        items_list=$(aws s3 ls "s3://$bucket/$prefix" --profile $AWS_PROFILE | awk '{print $NF}')
         menu_choice=$(printf "[BACK]\n[FORWARD]\n%s" "$items_list" | fzf --prompt="s3://$bucket/$prefix")
         if [ -z "$menu_choice" ]; then
             break
@@ -38,9 +48,9 @@ s3explore() {
             local action
             action=$(printf "preview\ndownload\ncancel" | fzf --prompt="Choose action for $items: ")
             if [ "$action" = "preview" ]; then
-                aws s3 cp "s3://$bucket/$prefix$items" - --profile dta | head -20
+                aws s3 cp "s3://$bucket/$prefix$items" - --profile $AWS_PROFILE | head -20
             elif [ "$action" = "download" ]; then
-                aws s3 cp "s3://$bucket/$prefix$items" . --profile dta
+                aws s3 cp "s3://$bucket/$prefix$items" . --profile $AWS_PROFILE
                 echo "Downloaded $items to current directory."
             fi
         fi
@@ -52,11 +62,11 @@ s3explore() {
 pipeline() {
   aws codepipeline get-pipeline-state --name "$1"-"$2"-pipeline \
   --query "stageStates[].{Stage: stageName, Status: latestExecution.status}" \
-  --output table  --profile dta --no-cli-pager
+  --output table  --profile $AWS_PROFILE --no-cli-pager
 }
 
 pls() {
-  aws codepipeline list-pipelines --profile dta --no-cli-pager  --query "pipelines[].name"  --output text | tr '\t' '\n' | fzf
+  aws codepipeline list-pipelines --profile $AWS_PROFILE --no-cli-pager  --query "pipelines[].name"  --output text | tr '\t' '\n' | fzf
 }
 
 # get pipeline details
@@ -68,7 +78,7 @@ pd() {
         pipeline_name="$1"
     fi
     aws codepipeline get-pipeline-state --name "$pipeline_name" \
-    --profile dta --no-cli-pager \
+    --profile $AWS_PROFILE --no-cli-pager \
     --query "stageStates[].{Stage: stageName, Status: latestExecution.status, actions: actionStates[].{Name: actionName, Status: latestExecution.status, id: latestExecution.externalExecutionId, summary: latestExecution.summary}}"
 }
 
@@ -81,7 +91,7 @@ psd() {
         pipeline_name="$1"
     fi
     aws codepipeline get-pipeline-state --name "$pipeline_name" \
-    --profile dta --no-cli-pager \
+    --profile $AWS_PROFILE --no-cli-pager \
     --query "stageStates[].{Stage: stageName, Status: latestExecution.status}" --output table
 }
 
@@ -97,7 +107,7 @@ pipelineLogs() {
     LOG_INFO=$(aws codebuild batch-get-builds \
         --ids "$pipeline_id" \
         --query "builds[].{logs: logs.{groupName: groupName, streamName: streamName}}" \
-        --profile dta \
+        --profile $AWS_PROFILE \
         --no-cli-pager) 
 
     echo "Log info: $LOG_INFO"
@@ -107,7 +117,7 @@ pipelineLogs() {
     aws logs get-log-events \
     --log-group-name "${LOG_GROUP}" \
     --log-stream-name "${LOG_STREAM}" \
-    --profile dta \
+    --profile $AWS_PROFILE \
     --query "events[*].message"  \
     --no-cli-pager --output text \
      --output json | jq -r '.[]' | \
@@ -129,7 +139,7 @@ tailLogs() {
     LOG_INFO=$(aws codebuild batch-get-builds \
         --ids "$1" \
         --query "builds[].{logs: logs.{groupName: groupName, streamName: streamName}}" \
-        --profile dta \
+        --profile $AWS_PROFILE \
         --no-cli-pager) 
 
     LOG_GROUP=$(echo "$LOG_INFO" | jq -r '.[0].logs.groupName')
@@ -141,19 +151,15 @@ tailLogs() {
         --profile dta
 }
 
-# Find history command
-fh() {
-    history 
-}
 
 # tail lambda logs
 tll() {
     # tail the logs
     aws logs tail "/aws/lambda/$(aws lambda list-functions \
             --query 'Functions[*].FunctionName' --output text \
-            --profile dta --no-cli-pager | tr '\t' '\n' | fzf)" \
+            --profile $AWS_PROFILE --no-cli-pager | tr '\t' '\n' | fzf)" \
         --follow \
-        --profile dta
+        --profile $AWS_PROFILE
 
 }
 
@@ -185,19 +191,19 @@ rpl() {
 #Tail logs for choosen log group
 tl() {
     local log_group
-    log_group=$(aws logs describe-log-groups --query 'logGroups[*].logGroupName' --output text --profile dta | tr '\t' '\n' | fzf)
+    log_group=$(aws logs describe-log-groups --query 'logGroups[*].logGroupName' --output text --profile $AWS_PROFILE | tr '\t' '\n' | fzf)
     if [ -z "$log_group" ]; then
         echo "No log group selected."
         return 1
     fi
-    aws logs tail "$log_group" --follow --profile dta
+    aws logs tail "$log_group" --follow --profile $AWS_PROFILE
 }
 
 
 # read logs for choosen log group
 rl() {
     local log_group
-    log_group=$(aws logs describe-log-groups --query 'logGroups[*].logGroupName' --output text --profile dta | tr '\t' '\n' | fzf)
+    log_group=$(aws logs describe-log-groups --query 'logGroups[*].logGroupName' --output text --profile $AWS_PROFILE | tr '\t' '\n' | fzf)
     if [ -z "$log_group" ]; then
         echo "No log group selected."
         return 1
@@ -205,7 +211,7 @@ rl() {
     echo "Selected log group: $log_group"
 
     local log_stream
-    log_stream=$(aws logs describe-log-streams --log-group-name "$log_group" --order-by LastEventTime --descending --query 'logStreams[*].logStreamName' --output text --profile dta | tr '\t' '\n' | fzf)
+    log_stream=$(aws logs describe-log-streams --log-group-name "$log_group" --order-by LastEventTime --descending --query 'logStreams[*].logStreamName' --output text --profile $AWS_PROFILE | tr '\t' '\n' | fzf)
     if [ -z "$log_stream" ]; then
         echo "No log stream selected."
         return 1
@@ -220,7 +226,7 @@ rl() {
         --log-stream-name "$log_stream" \
         --query 'events[*].message' \
         --output text \
-        --profile dta | awk '
+        --profile $AWS_PROFILE | awk '
         /error/   { print "\033[1;31m" $0 "\033[0m"; next } # Red for errors
         /ERROR/   { print "\033[1;31m" $0 "\033[0m"; next }
         /warn/    { print "\033[1;33m" $0 "\033[0m"; next } # Orange for warnings

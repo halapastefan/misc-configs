@@ -1,6 +1,6 @@
 [user]
-	email = s.halapa@levi9.com
 	name = Stefan Halapa
+	email = s.halapa@levi9.com
 [core]
 	compression = 9
 	whitespaces = error
