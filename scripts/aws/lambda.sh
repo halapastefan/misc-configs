@@ -14,11 +14,22 @@ lambdaDetails() {
 
     # Refresh cache if needed or if cache doesn't exist
     if [[ $REFRESH -eq 1 || ! -f "$CACHE_FILE" ]]; then
-        aws lambda list-functions --profile dta --query 'Functions[*].FunctionName' --output text | tr '\t' '\n' > "$CACHE_FILE"
+        aws lambda list-functions --profile dta --query 'Functions[*].FunctionName' --output text | tr '\t' '\n' >"$CACHE_FILE"
     fi
 
-    cat "$CACHE_FILE" | \
-    fzf --preview '
+    cat "$CACHE_FILE" |
+        fzf --preview '
     aws lambda get-function-configuration --profile dta --function-name {} | jq
     ' --preview-window=right:60% --height 100%
+}
+
+# tail lambda logs
+tll() {
+    # tail the logs
+    aws logs tail "/aws/lambda/$(aws lambda list-functions \
+        --query 'Functions[*].FunctionName' --output text \
+        --profile $AWS_PROFILE --no-cli-pager | tr '\t' '\n' | fzf)" \
+        --follow \
+        --profile $AWS_PROFILE
+
 }
