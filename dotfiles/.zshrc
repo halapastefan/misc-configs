@@ -110,10 +110,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 source "$HOME/scripts/aliases/aliases-general.sh"
 source "$HOME/scripts/aliases/aliases-project.sh"
-source "$HOME/scripts/aws/functions.sh"
-source "$HOME/scripts/aws/lambda.sh"
-source "$HOME/scripts/aws/cloudformation.sh"
-source "$HOME/scripts/aws/pipelines.sh"
+source "$HOME/scripts/aws/aws.sh"
 
 eval "$(zoxide init zsh)"
 export PATH=$PATH:/Users/s.halapa/.spicetify

@@ -1,4 +1,4 @@
-CACHE_DIR="$HOME/.cache/functions"
+CACHE_DIR="$HOME/.cache/functions/aws/$(get_active_profile)"
 PIPELINE_CACHE_FILE="$CACHE_DIR/pipeline_list.txt"
 
 pl_help() {
@@ -109,12 +109,15 @@ tpl() {
     tailLogs "$pipeline_id"
 }
 
-_tpl_completion() {
+_pipeline_name_completion() {
     if [[ -f "$PIPELINE_CACHE_FILE" ]]; then
         compadd -- $(cat "$PIPELINE_CACHE_FILE")
     fi
 }
-compdef _tpl_completion tpl
+compdef _pipeline_name_completion pd
+compdef _pipeline_name_completion ple
+compdef _pipeline_name_completion rpl
+compdef _pipeline_name_completion tpl
 
 ##########################################################
 ############# Helper functions for pipelines #############

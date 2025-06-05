@@ -1,0 +1,5 @@
+source "$HOME/scripts/aws/functions.sh"
+source "$HOME/scripts/aws/lambda.sh"
+source "$HOME/scripts/aws/cloudformation.sh"
+source "$HOME/scripts/aws/pipelines.sh"
+source "$HOME/scripts/aws/cloudwatch.sh"

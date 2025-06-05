@@ -1,35 +1,47 @@
+CACHE_DIR="$HOME/.cache/functions/aws/$(get_active_profile)"
+CACHE_FILE="$CACHE_DIR/lambda_list.txt"
+
 # Select Lambda function with fzf and show config in preview
 lambdaDetails() {
-    CACHE_DIR="$HOME/.cache/.myfunctions"
-    CACHE_FILE="$CACHE_DIR/lambda_list.txt"
-    REFRESH=0
+    local profile selected_lambda
+    profile="$(get_active_profile)"
 
-    # Ensure cache directory exists
-    mkdir -p "$CACHE_DIR"
-
-    # Check for -r flag
-    if [[ "$1" == "-r" ]]; then
-        REFRESH=1
+    if [ -z "$1" ]; then
+        selected_lambda=$(cat "$CACHE_FILE" |
+            fzf --preview "
+            aws lambda get-function-configuration --profile \"$profile\" --function-name {} | jq \".\" | bat --language json --style=plain --paging=never --color=always
+        " --preview-window=right:60% --height 100%)
+    else
+        selected_lambda="$1"
     fi
 
-    # Refresh cache if needed or if cache doesn't exist
-    if [[ $REFRESH -eq 1 || ! -f "$CACHE_FILE" ]]; then
-        aws lambda list-functions --profile dta --query 'Functions[*].FunctionName' --output text | tr '\t' '\n' >"$CACHE_FILE"
+    if [ -n "$selected_lambda" ]; then
+        aws lambda get-function-configuration --profile "$profile" --function-name "$selected_lambda" | jq "."
     fi
-
-    cat "$CACHE_FILE" |
-        fzf --preview '
-    aws lambda get-function-configuration --profile dta --function-name {} | jq
-    ' --preview-window=right:60% --height 100%
 }
 
 # tail lambda logs
 tll() {
-    # tail the logs
-    aws logs tail "/aws/lambda/$(aws lambda list-functions \
-        --query 'Functions[*].FunctionName' --output text \
-        --profile $AWS_PROFILE --no-cli-pager | tr '\t' '\n' | fzf)" \
-        --follow \
-        --profile $AWS_PROFILE
+    local lambda_name
+    if [ -z "$1" ]; then
+        lambda_name=$(cat "$CACHE_FILE" | fzf --prompt="Select Lambda function: ")
+    else
+        lambda_name="$1"
+    fi
+    if [ -z "$lambda_name" ]; then
+        echo "No pipeline selected."
+        return 1
+    fi
 
+    # tail the logs
+    aws logs tail "/aws/lambda/$lambda_name" \
+        --follow --profile "$(get_active_profile)"
 }
+
+_lambda_completion() {
+    if [[ -f "$CACHE_FILE" ]]; then
+        compadd -- $(cat "$CACHE_FILE")
+    fi
+}
+compdef _lambda_completion lambdaDetails
+compdef _lambda_completion tll
