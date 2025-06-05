@@ -175,18 +175,7 @@ tpl() {
     tailLogs "$pipeline_id"
 }
 
-#Read pipeline logs
-rpl() {
-    local pipeline_name
-    if [ -z "$1" ]; then
-        pipeline_name=$(pls)
-    else
-        pipeline_name="$1"
-    fi
-    local pipeline_id
-    pipeline_id=$(pd "$pipeline_name" | jq -r '.[].actions[].id' | fzf)
-    pipelineLogs "$pipeline_id"
-}
+
 
 #Tail logs for choosen log group
 tl() {

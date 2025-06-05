@@ -112,6 +112,7 @@ source "$HOME/scripts/aliases/aliases-general.sh"
 source "$HOME/scripts/aliases/aliases-project.sh"
 source "$HOME/scripts/aws/functions.sh"
 source "$HOME/scripts/aws/lambda.sh"
+source "$HOME/scripts/aws/cloudformation.sh"
 source "$HOME/scripts/aws/pipelines.sh"
 
 eval "$(zoxide init zsh)"
