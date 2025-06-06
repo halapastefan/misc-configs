@@ -1,5 +1,5 @@
 CACHE_DIR="$HOME/.cache/functions/aws/$(get_active_profile)"
-CACHE_FILE="$CACHE_DIR/log_group_list.txt"
+LOG_GROUPS_FILE="$CACHE_DIR/log_group_list.txt"
 
 #Tail logs for choosen log group
 tl() {
@@ -36,8 +36,8 @@ rl() {
 }
 
 _log_group_completion() {
-    if [[ -f "$CACHE_FILE" ]]; then
-        compadd -- $(cat "$CACHE_FILE")
+    if [[ -f "$LOG_GROUPS_FILE" ]]; then
+        compadd -- $(cat "$LOG_GROUPS_FILE")
     fi
 }
 compdef _log_group_completion tl
@@ -47,7 +47,7 @@ _select_log_group() {
     local log_group
 
     if [ -z "$1" ]; then
-        log_group=$(cat "$CACHE_FILE" | fzf --prompt="Select log group: ")
+        log_group=$(cat "$LOG_GROUPS_FILE" | fzf --prompt="Select log group: ")
     else
         log_group="$1"
     fi

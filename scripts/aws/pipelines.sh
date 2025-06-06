@@ -31,13 +31,6 @@ pd() {
         --query "stageStates[].{Stage: stageName, Status: latestExecution.status, actions: actionStates[].{Name: actionName, Status: latestExecution.status, id: latestExecution.externalExecutionId, summary: latestExecution.summary}}"
 }
 
-_pd_completion() {
-    if [[ -f "$PIPELINE_CACHE_FILE" ]]; then
-        compadd -- $(cat "$PIPELINE_CACHE_FILE")
-    fi
-}
-compdef _pd_completion pd
-
 # Read pipeline executions states
 # Usage: ple pipeline_name or just ple to select from list
 ple() {
@@ -59,12 +52,6 @@ ple() {
         --output table | fzf --prompt="Select execution for $pipeline_name: "
 }
 
-_ple_completion() {
-    if [[ -f "$PIPELINE_CACHE_FILE" ]]; then
-        compadd -- $(cat "$PIPELINE_CACHE_FILE")
-    fi
-}
-compdef _ple_completion ple
 
 # Read pipeline logs
 # Usage: rpl pipeline_name or just rpl to select from list
@@ -83,13 +70,6 @@ rpl() {
     pipeline_id=$(pd "$pipeline_name" | jq -r '.[].actions[].id' | fzf)
     pipelineLogs "$pipeline_id"
 }
-
-_rpl_completion() {
-    if [[ -f "$PIPELINE_CACHE_FILE" ]]; then
-        compadd -- $(cat "$PIPELINE_CACHE_FILE")
-    fi
-}
-compdef _rpl_completion rpl
 
 # Tail logs for a specific pipeline action
 # Usage: tpl pipeline_name or just tpl to select from list
@@ -150,14 +130,12 @@ pipelineLogs() {
         pipeline_id="$1"
     fi
 
-    echo "Fetching logs for pipeline: $pipeline_id"
     LOG_INFO=$(aws codebuild batch-get-builds \
         --ids "$pipeline_id" \
         --query "builds[].{logs: logs.{groupName: groupName, streamName: streamName}}" \
         --profile $(get_active_profile) \
         --no-cli-pager)
 
-    echo "Log info: $LOG_INFO"
     LOG_GROUP=$(echo "$LOG_INFO" | jq -r '.[0].logs.groupName')
     LOG_STREAM=$(echo "$LOG_INFO" | jq -r '.[0].logs.streamName')
 

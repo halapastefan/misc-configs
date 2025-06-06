@@ -9,6 +9,7 @@ aws_login() {
     local PIPELINE_CACHE_FILE="$CACHE_DIR/pipeline_list.txt"
     local LAMBDA_CACHE_FILE="$CACHE_DIR/lambda_list.txt"
     local LOG_GROUP_CACHE_FILE="$CACHE_DIR/log_group_list.txt"
+    local CLOUDFORMATION_CACHE_FILE="$CACHE_DIR/stack_list.txt"
 
     local ACTIVE_PROFILE_FILE="$HOME/.cache/functions/aws/active_profile"
     aws sso login --profile "$PROFILE"
@@ -26,6 +27,7 @@ aws_login() {
         aws codepipeline list-pipelines --profile "$PROFILE" --query 'pipelines[*].name' --output text | tr '\t' '\n' >"$PIPELINE_CACHE_FILE"
         aws lambda list-functions --profile "$PROFILE" --query 'Functions[*].FunctionName' --output text | tr '\t' '\n' >"$LAMBDA_CACHE_FILE"
         aws logs describe-log-groups --query 'logGroups[*].logGroupName' --output text --profile $PROFILE | tr '\t' '\n' > "$LOG_GROUP_CACHE_FILE"
+        aws cloudformation list-stacks --profile "$PROFILE" --query "StackSummaries[?StackStatus!='DELETE_COMPLETE'].StackName" --output text | tr '\t' '\n' >"$CLOUDFORMATION_CACHE_FILE"
     fi
 }
 

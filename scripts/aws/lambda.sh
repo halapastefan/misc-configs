@@ -1,5 +1,5 @@
 CACHE_DIR="$HOME/.cache/functions/aws/$(get_active_profile)"
-CACHE_FILE="$CACHE_DIR/lambda_list.txt"
+LAMBDA_CACHE_FILE="$CACHE_DIR/lambda_list.txt"
 
 # Select Lambda function with fzf and show config in preview
 lambdaDetails() {
@@ -7,7 +7,7 @@ lambdaDetails() {
     profile="$(get_active_profile)"
 
     if [ -z "$1" ]; then
-        selected_lambda=$(cat "$CACHE_FILE" |
+        selected_lambda=$(cat "$LAMBDA_CACHE_FILE" |
             fzf --preview "
             aws lambda get-function-configuration --profile \"$profile\" --function-name {} | jq \".\" | bat --language json --style=plain --paging=never --color=always
         " --preview-window=right:60% --height 100%)
@@ -24,7 +24,7 @@ lambdaDetails() {
 tll() {
     local lambda_name
     if [ -z "$1" ]; then
-        lambda_name=$(cat "$CACHE_FILE" | fzf --prompt="Select Lambda function: ")
+        lambda_name=$(cat "$LAMBDA_CACHE_FILE" | fzf --prompt="Select Lambda function: ")
     else
         lambda_name="$1"
     fi
@@ -39,8 +39,8 @@ tll() {
 }
 
 _lambda_completion() {
-    if [[ -f "$CACHE_FILE" ]]; then
-        compadd -- $(cat "$CACHE_FILE")
+    if [[ -f "$LAMBDA_CACHE_FILE" ]]; then
+        compadd -- $(cat "$LAMBDA_CACHE_FILE")
     fi
 }
 compdef _lambda_completion lambdaDetails
