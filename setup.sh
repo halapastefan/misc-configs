@@ -1,4 +1,4 @@
-brew install --cask iterm2
+brew install --cask alacritty
 brew install lazygit
 brew install zoxide
 brew install eza
