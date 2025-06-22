@@ -34,7 +34,7 @@ tll() {
     fi
 
     # tail the logs
-    aws logs tail "$lambda_name" \
+    aws logs tail /aws/lambda/"$lambda_name" \
         --follow --profile "$(get_active_profile)"
 }
 

@@ -27,7 +27,7 @@ rl() {
         --log-stream-name "$log_stream" \
         --query 'events[*].message' \
         --output text \
-        --profile $AWS_PROFILE | awk '
+        --profile "$(get_active_profile)" | awk '
         /error/   { print "\033[1;31m" $0 "\033[0m"; next } # Red for errors
         /ERROR/   { print "\033[1;31m" $0 "\033[0m"; next }
         /warn/    { print "\033[1;33m" $0 "\033[0m"; next } # Orange for warnings
