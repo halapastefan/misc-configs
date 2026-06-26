@@ -1,3 +1,4 @@
+nvm alias default 24
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -112,7 +113,7 @@ source "$HOME/scripts/aliases/aliases-general.sh"
 source "$HOME/scripts/aliases/aliases-project.sh"
 source "$HOME/scripts/aws/aws.sh"
 
-eval "$(zoxide init zsh)"
+
 export PATH=$PATH:/Users/s.halapa/.spicetify
 
 # NOTE: FZF
@@ -193,3 +194,10 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza --icons=always --color=
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+eval "$(zoxide init zsh)"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/s.halapa/.lmstudio/bin"
+# End of LM Studio CLI section
+

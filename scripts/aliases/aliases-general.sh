@@ -68,3 +68,16 @@ alias ls='eza --long --color=always --icons=always --no-user'
 
 # AWS
 alias ld='lambdaDetails'
+
+
+# Claude
+alias claude-stx="CLAUDE_CONFIG_DIR=~/.claude-stx claude"
+alias claude-levi9="CLAUDE_CONFIG_DIR=~/.claude-levi9 claude"
+alias claude-personal="CLAUDE_CONFIG_DIR=~/.claude-personal claude"
+
+alias claude-desktop-stx='open -n -a "Claude" --args --user-data-dir="©/Claude-STX"'
+alias claude-desktop-personal='open -n -a "Claude" --args --user-data-dir="$HOME/Library/Application Support/Claude-personal"'
+alias claude-desktop-levi9='open -n -a "Claude" --args --user-data-dir="$HOME/Library/Application Support/Claude-levi9"'
+
+
+alias afocus='aerospace list-windows --all --format "%{window-id} %{app-name} - %{window-title}" | fzf --prompt="window > " | awk "{print \$1}" | xargs -I{} aerospace focus --window-id {}'

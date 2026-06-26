@@ -24,7 +24,7 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 accordion-padding = 30
 
 # Possible values: tiles|accordion
-default-root-container-layout = 'tiles'
+default-root-container-layout = 'accordion'
 
 # Possible values: horizontal|vertical|auto
 # 'auto' means: wide monitor (anything wider than high) gets horizontal orientation,
@@ -122,7 +122,7 @@ automatically-unhide-macos-hidden-apps = false
     alt-p = 'workspace Programming'
     alt-t = 'workspace Terminal'
     alt-f = 'workspace Files'
-    alt-o = 'workspace Others'
+    alt-o = 'workspace Office'
     alt-c = 'workspace Communication'
     alt-e = 'workspace Email'
     alt-n = 'workspace Notes'
@@ -130,6 +130,8 @@ automatically-unhide-macos-hidden-apps = false
     alt-d = 'workspace DB'
     alt-1 = 'workspace 1'
     alt-2 = 'workspace 2'
+    alt-3 = 'workspace AI'
+
 
     alt-7 = 'workspace 7'
     alt-8 = 'workspace 8'
@@ -162,7 +164,7 @@ automatically-unhide-macos-hidden-apps = false
     alt-shift-p = 'move-node-to-workspace Programming'
     alt-shift-t = 'move-node-to-workspace Terminal'
     alt-shift-f = 'move-node-to-workspace Files'
-    alt-shift-o = 'move-node-to-workspace Others'
+    alt-shift-o = 'move-node-to-workspace Office'
     alt-shift-c = 'move-node-to-workspace Communication'
     alt-shift-n = 'move-node-to-workspace Notes'
     alt-shift-m = 'move-node-to-workspace Media'
@@ -170,6 +172,7 @@ automatically-unhide-macos-hidden-apps = false
     alt-shift-d = 'move-node-to-workspace DB'
     alt-shift-1 = 'move-node-to-workspace 1'
     alt-shift-2 = 'move-node-to-workspace 2'
+    alt-shift-3 = 'move-node-to-workspace AI'
 
     alt-shift-7 = 'move-node-to-workspace 7'
     alt-shift-8 = 'move-node-to-workspace 8'
@@ -189,7 +192,7 @@ automatically-unhide-macos-hidden-apps = false
 Browsing = 'main'
 Programming = 'main'
 Terminal = 'main'
-Others = 'main'
+Office = 'main'
 DB = 'main'
 1 = 'main'
 2 = 'main'
@@ -209,73 +212,114 @@ Media = ['secondary', 'main']
 [[on-window-detected]]
 if.app-id = 'com.brave.Browser'
 check-further-callbacks = true
-run = ['layout tiling', 'move-node-to-workspace Browsing']
+run = ['layout accordion', 'move-node-to-workspace Browsing']
 
 #VSCode
 [[on-window-detected]]
 if.app-id = 'com.microsoft.VSCode'
 check-further-callbacks = true
-run = ['layout tiling', 'move-node-to-workspace Programming']
+run = ['layout accordion', 'move-node-to-workspace Programming']
 
 #Finder
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
 check-further-callbacks = true
-run = ['layout tiling', 'move-node-to-workspace Files']
+run = ['layout accordion', 'move-node-to-workspace Files']
 
 #DBeaver
 [[on-window-detected]]
 if.app-id = 'org.jkiss.dbeaver.core.product'
 check-further-callbacks = true
-run = ['layout tiling', 'move-node-to-workspace DB']
+run = ['layout accordion', 'move-node-to-workspace DB']
 
 #com.mongodb.compass
 [[on-window-detected]]
 if.app-id = 'com.mongodb.compass'
 check-further-callbacks = true
-run = ['layout tiling', 'move-node-to-workspace DB']
+run = ['layout accordion', 'move-node-to-workspace DB']
 
 #Terminal
 [[on-window-detected]]
 if.app-id = 'com.googlecode.iterm2'
 check-further-callbacks = true
-run = ['layout tiling', 'move-node-to-workspace Terminal']
+run = ['layout accordion', 'move-node-to-workspace Terminal']
 
 #Alacrity
 [[on-window-detected]]
 if.app-id = 'org.alacritty'
 check-further-callbacks = true
-run = ['layout tiling', 'move-node-to-workspace Terminal']
+run = ['layout accordion', 'move-node-to-workspace Terminal']
 
 #Slack
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
 check-further-callbacks = true
-run = ['layout tiling', 'move-node-to-workspace Communication']
+run = ['layout accordion', 'move-node-to-workspace Communication']
 
 #Teams
 [[on-window-detected]]
 if.app-id = 'com.microsoft.teams2'
 check-further-callbacks = true
-run = ['layout tiling', 'move-node-to-workspace Communication']
+run = ['layout accordion', 'move-node-to-workspace Communication']
 
 #Obsidian
 [[on-window-detected]]
 if.app-id = 'md.obsidian'
 check-further-callbacks = true
-run = ['layout tiling', 'move-node-to-workspace Notes']
+run = ['layout accordion', 'move-node-to-workspace Notes']
 
 #Spotify
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
 check-further-callbacks = true
-run = ['layout tiling', 'move-node-to-workspace Media']
+run = ['layout accordion', 'move-node-to-workspace Media']
 
 #Outlook
 [[on-window-detected]]
 if.app-id = 'com.microsoft.Outlook'
 check-further-callbacks = true
-run = ['layout tiling', 'move-node-to-workspace Email']
+run = ['layout floating', 'move-node-to-workspace Email']
+
+#com.anthropic.claudefordesktop 
+[[on-window-detected]]
+if.app-id = 'com.anthropic.claudefordesktop'
+check-further-callbacks = true
+run = ['layout accordion', 'move-node-to-workspace AI']
+
+#com.openai.codex 
+[[on-window-detected]]
+if.app-id = 'com.openai.codex'
+check-further-callbacks = true
+run = ['layout accordion', 'move-node-to-workspace AI']
+
+#ai.elementlabs.lmstudio
+[[on-window-detected]]
+if.app-id = 'ai.elementlabs.lmstudio'
+check-further-callbacks = true
+run = ['layout accordion', 'move-node-to-workspace AI']
+
+## Office
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Word'
+check-further-callbacks = true
+run = ['layout accordion', 'move-node-to-workspace Office']
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Excel'
+check-further-callbacks = true
+run = ['layout accordion', 'move-node-to-workspace Office']
+
+# Other known
+[[on-window-detected]]
+if.app-id = 'com.electron.dockerdesktop'
+check-further-callbacks = true
+run = ['layout accordion', 'move-node-to-workspace 2']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.ActivityMonitor'
+check-further-callbacks = true
+run = ['layout accordion', 'move-node-to-workspace 7']
+
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
